@@ -7,7 +7,7 @@ logo: /img/web_icons.JPG
 # Page metadata configurations
 head:
     # URL or path to the website's icon
-    favicon: /img/web_icons.JPG
+    favicon: /img/web_icons.jpg
     # Web application manifests configuration
     # https://developer.mozilla.org/en-US/docs/Web/Manifest
     manifest:
@@ -235,7 +235,7 @@ widgets:
         # Author's current location
         location: San Francisco Bay Area
         # URL or path to the avatar image
-        avatar: 
+        avatar: /img/avatar_icons.jpg
         # Whether show the rounded avatar image
         avatar_rounded: false
         # Email address for the Gravatar
