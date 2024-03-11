@@ -1,0 +1,59 @@
+widgets:
+    # Profile widget configurations
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: profile
+        # Author name
+        author: Jie Sun
+        # Author title
+        author_title: Machine Learning / Software Development
+        # Author's current location
+        location: San Francisco Bay Area
+        # URL or path to the avatar image
+        avatar: /img/avatar_icons.jpg
+        # Whether show the rounded avatar image
+        avatar_rounded: false
+        # Email address for the Gravatar
+        gravatar: 
+        # URL or path for the follow button
+        follow_link: https://github.com/janofsun
+        # Links to be shown on the bottom of the profile widget
+        social_links:
+            Github:
+                icon: fab fa-github
+                url: https://github.com/janofsun
+            Linkedin:
+                icon: fab fa-linkedin
+                url: https://www.linkedin.com/in/jie-sun-523466230/
+            Scholar:
+                icon: fab fa-google
+                url: https://ieeexplore.ieee.org/author/37089513039
+            Gmail:
+                icon: fas fa-envelope
+                url: mailto:jadesun0115@gmail.com
+    # Table of contents widget configurations
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: toc
+        # Whether to show the index of each heading
+        index: true
+        # Whether to collapse sub-headings when they are out-of-view
+        collapsed: true
+        # Maximum level of headings to show (1-6)
+        depth: 3
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: categories
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: tags
+        # How to order tags. For example 'name' to order by name in ascending order, and '-length' to order by number of posts in each tags in descending order
+        order_by: name
+        # Amount of tags to show. Will show all if not set.
+        amount: 
+        # Whether to show tags count, i.e. number of posts in the tag.
+        show_count: true
