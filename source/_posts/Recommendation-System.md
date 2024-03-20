@@ -116,6 +116,7 @@ This component focuses on higher precision.
 #### <font color=#377f99>Example: Video Recommendation</font>
 - **Problem statement**:
     - Build a video recommendation system for YouTube users.
+    - Recommendation Youtube is extremely
 
 - **Metrics**:
     - Offline：
@@ -138,7 +139,6 @@ This component focuses on higher precision.
     - Assumptions:
         - Video views are $150$ billion per month
         - $10%$ of videos are recommended, $15$ billion
-        - 
     - Data Size:
         - $500 $
     - Bandwidth: 
