@@ -17,6 +17,12 @@ categories:
 <!--more-->
 DenseNet is detached from the stereotypical thinking of deepening the number of network layers (ResNet) and widening the network structure (Inception) to improve the performance of the network.
 
+##### <font color=#6caa89>The Limitations</font>
+DenseNet and other related networks all share a key characteristic: they create short path from early layers to later layers. There exists some limitations from its pioneering works.
+- ResNet combines features through summation (additive identity transformations).
+- Stochastic depth improves the training of deep residual networks by dropping layers randomly during training.
+The major difference between DenseNet and related works is to use
+
 ##### <font color=#6caa89>Advantages</font>
 
 - Improve flow of information and gradients through the network
