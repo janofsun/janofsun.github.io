@@ -136,9 +136,10 @@ This component focuses on higher precision.
 </p>
 
 - **Calculation&&Estimation**
+
     - Assumptions:
         - Video views are $150$ billion per month
-        - $10%$ of videos are recommended, $15$ billion
+        - $10\%$ of videos are recommended, $15$ billion
     - Data Size:
         - $500 $
     - Bandwidth: 
