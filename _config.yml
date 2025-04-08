@@ -103,6 +103,6 @@ theme: icarus
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  # repository: git@github.com:janofsun/janofsun.github.io.git
-  repository: https://github.com/janofsun/janofsun.github.io
+  repository: git@github.com:janofsun/janofsun.github.io.git
+  # repository: https://github.com/janofsun/janofsun.github.io
   branch: gh-pages
