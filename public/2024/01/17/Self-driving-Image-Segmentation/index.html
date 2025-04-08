@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Self-driving Image Segmentation - JieSun - LOGBOOK!!!</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="JieSun - LOGBOOK!"><meta name="msapplication-TileImage" content="/img/web_icons.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="JieSun - LOGBOOK!"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Problem StatementDesign a self-driving car system focusing on its perception component (semantic image segmentation in particular)"><meta property="og:type" content="blog"><meta property="og:title" content="Self-driving Image Segmentation"><meta property="og:url" content="https://janofsun.github.io/2024/01/17/Self-driving-Image-Segmentation/"><meta property="og:site_name" content="JieSun - LOGBOOK!!!"><meta property="og:description" content="Problem StatementDesign a self-driving car system focusing on its perception component (semantic image segmentation in particular)"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_high_level.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_system_sis.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_cgans.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_skip_connections.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_unet.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_maskrcnn.png"><meta property="article:published_time" content="2024-01-17T17:20:17.000Z"><meta property="article:modified_time" content="2024-04-01T06:13:45.640Z"><meta property="article:author" content="Jie Sun"><meta property="article:tag" content="Machine Learning"><meta property="article:tag" content="Grokking-the-ML-system-designs"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://janofsun.github.io/img/ML_sys_design/sdis/sdis_high_level.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://janofsun.github.io/2024/01/17/Self-driving-Image-Segmentation/"},"headline":"Self-driving Image Segmentation","image":["https://janofsun.github.io/img/ML_sys_design/sdis/sdis_high_level.png","https://janofsun.github.io/img/ML_sys_design/sdis/sdis_system_sis.png","https://janofsun.github.io/img/ML_sys_design/sdis/sdis_cgans.png","https://janofsun.github.io/img/ML_sys_design/sdis/sdis_skip_connections.png","https://janofsun.github.io/img/ML_sys_design/sdis/sdis_unet.png","https://janofsun.github.io/img/ML_sys_design/sdis/sdis_maskrcnn.png"],"datePublished":"2024-01-17T17:20:17.000Z","dateModified":"2024-04-01T06:13:45.640Z","author":{"@type":"Person","name":"Jie Sun"},"publisher":{"@type":"Organization","name":"JieSun - LOGBOOK!!!","logo":{"@type":"ImageObject","url":"https://janofsun.github.io/img/web_icons.jpg"}},"description":"Problem StatementDesign a self-driving car system focusing on its perception component (semantic image segmentation in particular)"}</script><link rel="canonical" href="https://janofsun.github.io/2024/01/17/Self-driving-Image-Segmentation/"><link rel="icon" href="/img/web_icons.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/web_icons.jpg" alt="JieSun - LOGBOOK!!!" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/Sitemap">Sitemap</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/janofsun"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2024-01-17T17:20:17.000Z" title="1/17/2024, 9:20:17 AM">2024-01-17</time></span><span class="level-item">Updated&nbsp;<time dateTime="2024-04-01T06:13:45.640Z" title="3/31/2024, 11:13:45 PM">2024-03-31</time></span><span class="level-item"><a class="link-muted" href="/categories/Tech/">Tech</a><span> / </span><a class="link-muted" href="/categories/Grokking-interviews/">Grokking-interviews</a><span> / </span><a class="link-muted" href="/categories/Grokking-interviews/ML/">ML</a><span> / </span><a class="link-muted" href="/categories/System-Design/">System-Design</a><span> / </span><a class="link-muted" href="/categories/System-Design/ML/">ML</a></span><span class="level-item">4 minutes read (About 610 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Self-driving Image Segmentation</h1><div class="content"><h4 id="Problem-Statement"><a href="#Problem-Statement" class="headerlink" title="Problem Statement"></a><font color=#90bee0>Problem Statement</font></h4><p>Design a self-driving car system focusing on its perception component (semantic image segmentation in particular)</p>
+<span id="more"></span>
+<p>Subtasks</p>
+<ul>
+<li>Object detection</li>
+<li>Semantic segmentation<ul>
+<li>Semantic segmentation can be viewed as a pixel-wise classification of an image.</li>
+</ul>
+</li>
+<li>Instance segmentation<ul>
+<li>It combines object detection and segmentation to classify the <u>pixels of each instance</u> of an object.</li>
+</ul>
+</li>
+<li>Scene understanding</li>
+<li>Movement plan</li>
+</ul>
+<h4 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics"></a><font color=#90bee0>Metrics</font></h4><ul>
+<li><p><strong>Component level metric</strong></p>
+<ul>
+<li><font color=#e1df92>Goal</font>: Higher pixel-wise accuracy for objects belonging to each class.</li>
+<li><font color=#e1df92>IoU</font> (Intersection over Union) <ul>
+<li>This will be used as the offline metrix.</li>
+<li>$IoU &#x3D; \frac{|P_{pred}\cap P_{gt}|}{|P_{pred}\cup P_{gt}|}$<ul>
+<li><font color=#fc8c5a>“area of overlap”</font>: means the number of pixels that belong to the particular class in both the prediction and ground-truth</li>
+<li><font color=#fc8c5a>“area of union”</font> refers to the number of pixels that belong to the particular class in the prediction and in ground-truth, but not in both (the overlap is subtracted).</li>
+</ul>
+</li>
+<li>The <font color=#fc8c5a>mean IoU</font> is calculated by taking the avaerage of the IoU for each class</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>End-to-end metric</strong></p>
+<ul>
+<li>Manual intervention</li>
+<li>Simulation errors</li>
+</ul>
+</li>
+</ul>
+<h4 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a><font color=#90bee0>Architecture</font></h4><ul>
+<li><strong>Overall architecture</strong> for self-driving vehicle<ul>
+<li>The object detection CNN detects and localizes all the obstacles and entities<ul>
+<li><font color=#fc8c5a>Drivable region detection CNN</font>: Action predictor RNN is information that allows it to extract a drivable path for the vehicle.</li>
+<li><font color=#fc8c5a>Semantic image segmentation</font> (from raw pixel-wise boundaries)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/sdis/sdis_high_level.png" width="100%" height="100%">
+</p>
+
+<ul>
+<li><strong>System architecture for semantic image segmentation</strong><ul>
+<li>The real-time driving images are captured and manually given pixel-wise labels.</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/sdis/sdis_system_sis.png" width="100%" height="100%">
+</p>
+
+<h4 id="Training-Data-Generation"><a href="#Training-Data-Generation" class="headerlink" title="Training Data Generation"></a><font color=#90bee0>Training Data Generation</font></h4><ul>
+<li>Human-labeled data</li>
+<li>Open Source dataset</li>
+<li>Training data enhancement through <a href="https://janofsun.github.io/2023/12/01/Intro-to-GAN/">GANs</a><ul>
+<li>Generating new training images</li>
+<li>Ensuring generated images have different conditions (e.g. weather and lighting conditions)<ul>
+<li>Image-to-image translation (cGANs)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/sdis/sdis_cgans.png" width="100%" height="100%">
+</p>
+
+<ul>
+<li>Targeted data gathering</li>
+</ul>
+<h4 id="Modeling"><a href="#Modeling" class="headerlink" title="Modeling"></a><font color=#90bee0>Modeling</font></h4><ul>
+<li><strong>SOTA segmentation models</strong></li>
+<li><font color=#e1df92>FCN</font><ul>
+<li>Segmentation is a dense prediction task of pixel-wise classification.</li>
+<li>Major characteristics<ul>
+<li><font color=#fc8c5a>Dynamic input size</font>: the fully connected layers are replaced by convolutional layers at the end of the regular convolution and pooling process.</li>
+<li><font color=#fc8c5a>Skip connection</font>: the initial layers capturing good edges are connected with the coarse pixel-wise segmentations.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/sdis/sdis_skip_connections.png" width="100%" height="100%">
+</p>
+
+<ul>
+<li><font color=#e1df92>U-Net</font><ul>
+<li>It is built upon FCN and commonly used for semantic segmentation-based vision applications.</li>
+<li><font color=#fc8c5a>Downsampling</font> increases info about what objects are present, decreases info about where objects are present.</li>
+<li><font color=#fc8c5a>Upsampling</font> creates high-resolution segmented output by making use of skip connections.</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/sdis/sdis_unet.png" width="100%" height="100%">
+</p>
+
+<ul>
+<li><font color=#e1df92>Mask R-CNN</font><ul>
+<li>It is used for <font color=#fc8c5a>instance segmentation</font>.</li>
+<li>Faster R-CNN for object detection and localization and FCN for pixel-wise instance segmentation of objects.<ul>
+<li>Backbone of a CNN followed by a <font color=#fc8c5a>Feature Pyramid Network (FPN)</font> which extracts feature maps at different scale.</li>
+<li>The feature maps are fed to the <font color=#fc8c5a>Region Proposal Network (RPN)</font>.</li>
+<li>These proposals are fed to the <font color=#fc8c5a>RoI Align layer</font> that extracts the corresponding ROIs (regions of interest) from the feature maps to align them with the input image properly.</li>
+<li>The ROI pooled outputs are fixed-size feature maps that are fed to parallel heads of the Mask R-CNN.</li>
+</ul>
+</li>
+<li>Mask R-CNN has <font color=#fc8c5a>three parallel heads</font> to perform Classification, Localization, and Segmentation.</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/sdis/sdis_maskrcnn.png" width="100%" height="100%">
+</p>
+
+<ul>
+<li><strong>Transfer learning</strong><ul>
+<li><font color=#e1df92>Retraining topmost layer</font><ul>
+<li>Update the final pixel-wise prediction layer in the pre-trained FCN</li>
+<li>This approach makes the most sense when<ul>
+<li>The data is limited.</li>
+<li>You believe that the current learned layers capture the information that you need for making a prediction.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><font color=#e1df92>Retraining top few layers</font><ul>
+<li>Update the upsampling layers and the final pixel-wise layer.</li>
+<li>This approach makes the most sense when<ul>
+<li>Have a medium-sized dataset</li>
+<li>Shallow layers generally don’t need training because they are capturing the basic image features, e.g., edges</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><font color=#e1df92>Retraining entire model</font><ul>
+<li>Laborious and time-consuming</li>
+<li>The dataset has completely different characteristics from the pre-trained network</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Self-driving Image Segmentation</p><p><a href="https://janofsun.github.io/2024/01/17/Self-driving-Image-Segmentation/">https://janofsun.github.io/2024/01/17/Self-driving-Image-Segmentation/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Jie Sun</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2024-01-17</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2024-03-31</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Machine-Learning/">Machine Learning</a><a class="link-muted mr-2" rel="tag" href="/tags/Grokking-the-ML-system-designs/">Grokking-the-ML-system-designs</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="https://www.buymeacoffee.com/jadesun0115" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" data-type="paypal" onclick="document.getElementById(&#039;paypal-donate-form&#039;).submit()"><span class="icon is-small"><i class="fab fa-paypal"></i></span><span>Paypal</span></a><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" rel="noopener" id="paypal-donate-form"><input type="hidden" name="cmd" value="_donations"><input type="hidden" name="business" value="jadesun0115@gmail.com"><input type="hidden" name="currency_code" value="USD"></form></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2024/01/18/Machine-Learning-Primer/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Machine Learning Primer</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/01/12/Entity-Linking-System/"><span class="level-item">Entity Linking System</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://janofsun.github.io/2024/01/17/Self-driving-Image-Segmentation/';
+            this.page.identifier = '2024/01/17/Self-driving-Image-Segmentation/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'hexo-blog-12' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar_icons.jpg" alt="Jie Sun"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jie Sun</p><p class="is-size-6 is-block">Machine Learning / Software Development</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>San Francisco Bay Area</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">20</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">9</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">9</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/janofsun" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/janofsun"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Linkedin" href="https://www.linkedin.com/in/jie-sun-523466230/"><i class="fab fa-linkedin"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Scholar" href="https://ieeexplore.ieee.org/author/37089513039"><i class="fab fa-google"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Gmail" href="mailto:jadesun0115@gmail.com"><i class="fas fa-envelope"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Grokking-interviews/"><span class="level-start"><span class="level-item">Grokking-interviews</span></span><span class="level-end"><span class="level-item tag">6</span></span></a><ul><li><a class="level is-mobile" href="/categories/Grokking-interviews/ML/"><span class="level-start"><span class="level-item">ML</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Project/"><span class="level-start"><span class="level-item">Project</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/Project/C/"><span class="level-start"><span class="level-item">C++</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/System-Design/"><span class="level-start"><span class="level-item">System-Design</span></span><span class="level-end"><span class="level-item tag">7</span></span></a><ul><li><a class="level is-mobile" href="/categories/System-Design/ML/"><span class="level-start"><span class="level-item">ML</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Tech/"><span class="level-start"><span class="level-item">Tech</span></span><span class="level-end"><span class="level-item tag">18</span></span></a><ul><li><a class="level is-mobile" href="/categories/Tech/Intro/"><span class="level-start"><span class="level-item">Intro</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C++</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Deep-Learning/"><span class="tag">Deep Learning</span><span class="tag">9</span></a></div><div class="control"><a class="tags has-addons" href="/tags/FFmpeg/"><span class="tag">FFmpeg</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Grokking-the-ML-system-designs/"><span class="tag">Grokking-the-ML-system-designs</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Machine-Learning/"><span class="tag">Machine Learning</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/OpenCV/"><span class="tag">OpenCV</span><span class="tag">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/OpenGL/"><span class="tag">OpenGL</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Paper/"><span class="tag">Paper</span><span class="tag">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tools/"><span class="tag">Tools</span><span class="tag">2</span></a></div></div></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/web_icons.jpg" alt="JieSun - LOGBOOK!!!" height="28"></a><p class="is-size-7"><span>&copy; 2024 Jie Sun</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mhchem.min.js" defer></script><script>window.addEventListener("load", function() {
+            document.querySelectorAll('[role="article"] > .content').forEach(function(element) {
+                renderMathInElement(element);
+            });
+        });</script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
