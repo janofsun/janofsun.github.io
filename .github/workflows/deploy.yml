@@ -1,0 +1,43 @@
+name: Build and Deploy Hexo
+
+on:
+  push:
+    branches:
+      - main  # 每次 push main 分支自动部署
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true  # 如果主题是 submodule 必须设置
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate static files
+        run: |
+          npx hexo clean
+          npx hexo generate
+          echo "" > public/.nojekyll  # 禁用 GitHub 默认的 Jekyll 处理
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
