@@ -5,12 +5,14 @@
 # Site
 title: JieSun LOGBOOK
 # Disable Jekyll
-markdown: kramdown
-kramdown:
-  input: GFM
-  hard_wrap: false
-# Use Hexo
-theme: icarus
+markdown: markdown-it
+markdown_it:
+  html: true
+  xhtmlOut: false
+  breaks: false
+  linkify: true
+  typographer: true
+  quotes: '“”‘’'
 subtitle: ''
 description: ''
 keywords:
