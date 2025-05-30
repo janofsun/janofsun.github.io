@@ -4,6 +4,13 @@
 
 # Site
 title: JieSun LOGBOOK
+# Disable Jekyll
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+# Use Hexo
+theme: icarus
 subtitle: ''
 description: ''
 keywords:
