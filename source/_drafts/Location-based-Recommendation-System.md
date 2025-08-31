@@ -1,5 +1,5 @@
 ---
-title: Location-based Recommendation System
+title: Event Recommendation System
 date: 2025-08-30 17:21:43
 tags: 
 - Machine Learning
