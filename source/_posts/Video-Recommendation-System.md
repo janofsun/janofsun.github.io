@@ -157,7 +157,11 @@ This component focuses on higher precision.
 - Media-based features
 - Media-user cross features
 
-### **<font color=#377f99>Example: Video Recommendation</font>**
+<font color=#377f99>Modelling</font>
+
+
+
+### **<font color=#377f99>Example: Youtube Video Recommendation</font>**
 #### **Problem statement**:
 Build a video recommendation system for YouTube users. Recommendation Youtube is extremely challenging from following major perspectives:
 - <font color=#f6a69c>Scale</font>: it is required to handle YouTube's massive user base and corpus;
