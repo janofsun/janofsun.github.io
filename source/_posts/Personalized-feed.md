@@ -94,7 +94,7 @@ Candidate generation
 - non-decomposable, pairwise features φ(user,item), push it to ranking stage
 
 <p align="center">
-<img src="/img/ML_sys_design/personalized_feed/cg_sources.png" width="80%" height="80%">
+<img src="/img/ML_sys_design/personalized_feed/retrieval.png" width="80%" height="80%">
 </p>
 
 Lightweight ranker
@@ -154,3 +154,4 @@ Online metrics
 
 ### References ⭐
 - [Scaling the Instagram Explore recommendations system](https://engineering.fb.com/2023/08/09/ml-applications/scaling-instagram-explore-recommendations-system/)
+- [Personalized News Feed](https://bytebytego.com/courses/machine-learning-system-design-interview/personalized-news-feed)
