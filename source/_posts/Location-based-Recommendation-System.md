@@ -6,7 +6,6 @@ tags:
 - Grokking-the-ML-system-designs
 categories: 
 - [Tech]
-- [Grokking-interviews, ML]
 - [System-Design, ML]
 ---
 
