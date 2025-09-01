@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Personalized feed - JieSun LOGBOOK</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="JieSun - LOGBOOK!"><meta name="msapplication-TileImage" content="/img/web_icons.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="JieSun - LOGBOOK!"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Problem StatementPersonalized posts&amp;#x2F;news&amp;#x2F;other content feed on social media like facebook, instagram, and Linkedin, to maintain user engagement."><meta property="og:type" content="blog"><meta property="og:title" content="Personalized feed"><meta property="og:url" content="https://janofsun.github.io/2025/08/31/Personalized-feed/"><meta property="og:site_name" content="JieSun LOGBOOK"><meta property="og:description" content="Problem StatementPersonalized posts&amp;#x2F;news&amp;#x2F;other content feed on social media like facebook, instagram, and Linkedin, to maintain user engagement."><meta property="og:locale" content="en_US"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/post_feature.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/user_feature.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/cg_sources.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/cg_sources.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/ranking.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/multi_task_dnn.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/feed_pipeline.png"><meta property="og:image" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/serving.png"><meta property="article:published_time" content="2025-09-01T06:21:16.000Z"><meta property="article:modified_time" content="2025-09-01T21:35:25.905Z"><meta property="article:author" content="Jie Sun"><meta property="article:tag" content="Machine Learning"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://janofsun.github.io/img/ML_sys_design/personalized_feed/post_feature.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://janofsun.github.io/2025/08/31/Personalized-feed/"},"headline":"Personalized feed","image":["https://janofsun.github.io/img/ML_sys_design/personalized_feed/post_feature.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/user_feature.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/cg_sources.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/cg_sources.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/ranking.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/multi_task_dnn.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/feed_pipeline.png","https://janofsun.github.io/img/ML_sys_design/personalized_feed/serving.png"],"datePublished":"2025-09-01T06:21:16.000Z","dateModified":"2025-09-01T21:35:25.905Z","author":{"@type":"Person","name":"Jie Sun"},"publisher":{"@type":"Organization","name":"JieSun LOGBOOK","logo":{"@type":"ImageObject","url":"https://janofsun.github.io/img/web_icons.jpg"}},"description":"Problem StatementPersonalized posts&#x2F;news&#x2F;other content feed on social media like facebook, instagram, and Linkedin, to maintain user engagement."}</script><link rel="canonical" href="https://janofsun.github.io/2025/08/31/Personalized-feed/"><link rel="icon" href="/img/web_icons.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/web_icons.jpg" alt="JieSun LOGBOOK" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/Sitemap">Sitemap</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/janofsun"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2025-09-01T06:21:16.000Z" title="8/31/2025, 11:21:16 PM">2025-08-31</time></span><span class="level-item">Updated&nbsp;<time dateTime="2025-09-01T21:35:25.905Z" title="9/1/2025, 2:35:25 PM">2025-09-01</time></span><span class="level-item"><a class="link-muted" href="/categories/Tech/">Tech</a><span> / </span><a class="link-muted" href="/categories/System-Design/">System-Design</a><span> / </span><a class="link-muted" href="/categories/System-Design/ML/">ML</a></span><span class="level-item">5 minutes read (About 796 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Personalized feed</h1><div class="content"><h4 id="Problem-Statement"><a href="#Problem-Statement" class="headerlink" title="Problem Statement"></a><font color=#377f99>Problem Statement</font></h4><p>Personalized posts&#x2F;news&#x2F;other content feed on social media like facebook, instagram, and Linkedin, to maintain user engagement.</p>
+<span id="more"></span>
+
+<h4 id="Clarifications-or-Assumptions"><a href="#Clarifications-or-Assumptions" class="headerlink" title="Clarifications or Assumptions"></a><font color=#377f99>Clarifications or Assumptions</font></h4><ul>
+<li>assume the motivation for a personalized feed is to keep users engaged with the platform</li>
+<li>refreshed activity consists of both unseen posts and posts with unseen comments</li>
+<li>a post contains textual content, images, video, or any combination</li>
+<li>the system should place the most engaging content at the top of timelines</li>
+<li>Is there a specific type of engagement we are optimizing for?<ul>
+<li>I assume users can click, like, share, comment, hide, block another user, and send connection requests</li>
+<li>for example, liking a post is more valuable than only clicking it</li>
+<li>our system should consider major reactions when ranking posts</li>
+</ul>
+</li>
+<li>the system should display the ranked posts in less than 200 milliseconds (ms).</li>
+<li>3B ADU, 2B ADU who check their feeds twice a day</li>
+</ul>
+<h4 id="Frame-as-an-ML-business-objective"><a href="#Frame-as-an-ML-business-objective" class="headerlink" title="Frame as an ML business objective"></a><font color=#377f99>Frame as an ML business objective</font></h4><p><font color=#f6a69c>Business Objective</font></p>
+<p>The objective of the system is to increase user engagement.</p>
+<p><font color=#f6a69c>ML Objective</font></p>
+<p>Maximize a weighted score based on both implicit and explicit reactions</p>
+<ul>
+<li>implicit (dwell time or user clicks etc.) and explicit reactions (likes, shares, and hides etc.)</li>
+<li>input: a user; output: a ranked list of unseen posts or posts with unseen comments sorted by engagement score.</li>
+</ul>
+<p>Pointwise Learning to Rank (LTR) is a choice for us to rank personalized feeds based on engagement scores.</p>
+<h4 id="Data-Engineering"><a href="#Data-Engineering" class="headerlink" title="Data Engineering"></a><font color=#377f99>Data Engineering</font></h4><ul>
+<li>User</li>
+<li>Posts</li>
+<li>User-post interactions</li>
+<li>Friendship</li>
+</ul>
+<h4 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a><font color=#377f99>Feature Engineering</font></h4><ul>
+<li>Post features<ul>
+<li>textual content</li>
+<li>images or videos</li>
+<li>reactions, converted into numeric values</li>
+<li>hashtags<ul>
+<li>Tokenization<ul>
+<li>contain multiple words, Viterbi</li>
+</ul>
+</li>
+<li>Tokens to IDs<ul>
+<li>Hashtags evolve quickly</li>
+</ul>
+</li>
+<li>Vectorization<ul>
+<li>simple text representation methods such as TF-IDF or word2vec</li>
+<li>Transformer-based models are useful when the context of the data is essential, faster and lighter text representation methods are preferred here</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>post’s age<ul>
+<li>Users tend to engage with newer content</li>
+<li>Bucketize into categories + one-hot encoding</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>User features<ul>
+<li>Demographics: age, gender, country, etc</li>
+<li>Contextual information: device, time of the day, etc</li>
+<li>User-post historical interactions</li>
+<li>Being mentioned in the post</li>
+</ul>
+</li>
+<li>User-author affinities<ul>
+<li>Like&#x2F;click&#x2F;comment&#x2F;share rate</li>
+<li>Length of friendship</li>
+<li>Close friends and family</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/post_feature.png" width="80%" height="80%">
+</p>
+
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/user_feature.png" width="80%" height="80%">
+</p>
+
+<h4 id="Modeling"><a href="#Modeling" class="headerlink" title="Modeling"></a><font color=#377f99>Modeling</font></h4><p>Candidate generation</p>
+<ul>
+<li>Cached embeddings to improve efficiency<ul>
+<li>pre-compute and store items embeddings into a service (FAISS&#x2F;Milvus&#x2F;Elastic KNN) offline to support online approximate nearest neighbors (ANN) search</li>
+</ul>
+</li>
+<li>During online retrieval we use the user tower to generate user embedding on the fly</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/cg_sources.png" width="80%" height="80%">
+</p>
+
+<p><font color=#efc581>Rule of thumb</font>: If your score can be written as sim(u(user_only), v(item_only)), it’s retrieval-safe and ANN-friendly.</p>
+<ul>
+<li>the retrieval model can’t consume user-item interaction features (which are usually the most powerful) because by consuming them it will lose the ability to provide cacheable user&#x2F;item embeddings.</li>
+<li>non-decomposable, pairwise features φ(user,item), push it to ranking stage</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/cg_sources.png" width="80%" height="80%">
+</p>
+
+<p>Lightweight ranker</p>
+<ul>
+<li>learning objective is different from the retrieval stage:<ul>
+<li>Retrieval is trained for recall&#x2F;coverage; pre-rank is distilled for “what the heavy model would keep”</li>
+<li>PSelect &#x3D; { media in top K results ranked by the second stage}</li>
+</ul>
+</li>
+<li>the only reason we use Two-Twoer NN again because of its cacheability property and scale&#x2F;latency&#x2F;throughput tradeoffs</li>
+<li>view this approach as a way of distilling knowledge from a bigger second-stage model to a smaller (more light-weight) first-stage model</li>
+</ul>
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/ranking.png" width="80%" height="80%">
+</p>
+
+<p>Heavey ranker</p>
+<ul>
+<li>multi-task multi label (MTML) neural network model.</li>
+<li>Value Model (VM): Expected Value &#x3D; W_click * P(click) + W_like * P(like) – W_see_less * P(see less) + etc.</li>
+</ul>
+<p>For both stages we choose to use neural networks</p>
+<ul>
+<li>it’s important to be able to adapt to changing trends in users’ behavior very quickly. Neural networks allow us to do this by utilizing continual online training, meaning we can re-train (fine-tune) our models every hour as soon as we have new data.</li>
+<li>a lot of important features are categorical in nature, and neural networks provide a natural way of handling categorical data by learning embeddings</li>
+</ul>
+<p>Re-ranker</p>
+<ul>
+<li>filter-out&#x2F;downrank some items based on integrity-related scores</li>
+<li>shuffle items based on some rules</li>
+</ul>
+<p><font color=#f6a69c>Loss function</font></p>
+<ul>
+<li>The overall loss is computed by combining task-specific losses</li>
+<li>use a binary cross-entropy loss for each binary classification task</li>
+<li>a regression loss such as MAE [11], MSE [12], or Huber loss [13] for the regression task (dwell-time prediction).</li>
+</ul>
+<p>Improving the DNN architecture for passive users (dwell-time and skip), since the current multi-task DNN model will predict very low probabilities for all reactions, since they rarely react to posts.</p>
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/multi_task_dnn.png" width="80%" height="80%">
+</p>
+
+<p align="center">
+<img src="/img/ML_sys_design/personalized_feed/feed_pipeline.png" width="80%" height="80%">
+</p>
+
+<h4 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a><font color=#377f99>Evaluation</font></h4><p>Offline metrics</p>
+<ul>
+<li>ROC-AUC for overall performance</li>
+</ul>
+<p>Online metrics</p>
+<ul>
+<li>Click-through rate (CTR)</li>
+<li>Reaction rate</li>
+<li>Total time spent</li>
+<li>User satisfaction rate found in a user survey</li>
+</ul>
+<h4 id="Serving"><a href="#Serving" class="headerlink" title="Serving"></a><font color=#377f99>Serving</font></h4><p align="center">
+<img src="/img/ML_sys_design/personalized_feed/serving.png" width="80%" height="80%">
+</p>
+
+<h3 id="References-⭐"><a href="#References-⭐" class="headerlink" title="References ⭐"></a>References ⭐</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://engineering.fb.com/2023/08/09/ml-applications/scaling-instagram-explore-recommendations-system/">Scaling the Instagram Explore recommendations system</a></li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Personalized feed</p><p><a href="https://janofsun.github.io/2025/08/31/Personalized-feed/">https://janofsun.github.io/2025/08/31/Personalized-feed/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Jie Sun</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2025-08-31</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2025-09-01</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Machine-Learning/">Machine Learning</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="https://www.buymeacoffee.com/jadesun0115" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" data-type="paypal" onclick="document.getElementById(&#039;paypal-donate-form&#039;).submit()"><span class="icon is-small"><i class="fab fa-paypal"></i></span><span>Paypal</span></a><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" rel="noopener" id="paypal-donate-form"><input type="hidden" name="cmd" value="_donations"><input type="hidden" name="business" value="jadesun0115@gmail.com"><input type="hidden" name="currency_code" value="USD"></form></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/08/30/Location-based-Recommendation-System/"><span class="level-item">Event Recommendation System</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://janofsun.github.io/2025/08/31/Personalized-feed/';
+            this.page.identifier = '2025/08/31/Personalized-feed/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'hexo-blog-12' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar_icons.jpg" alt="Jie Sun"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jie Sun</p><p class="is-size-6 is-block">Machine Learning / Software Development</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>San Francisco Bay Area</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">24</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">10</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">11</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/janofsun" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/janofsun"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Linkedin" href="https://www.linkedin.com/in/jie-sun-523466230/"><i class="fab fa-linkedin"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Scholar" href="https://ieeexplore.ieee.org/author/37089513039"><i class="fab fa-google"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Gmail" href="mailto:jadesun0115@gmail.com"><i class="fas fa-envelope"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AI-Agent/"><span class="level-start"><span class="level-item">AI Agent</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Grokking-interviews/"><span class="level-start"><span class="level-item">Grokking-interviews</span></span><span class="level-end"><span class="level-item tag">6</span></span></a><ul><li><a class="level is-mobile" href="/categories/Grokking-interviews/ML/"><span class="level-start"><span class="level-item">ML</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Project/"><span class="level-start"><span class="level-item">Project</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/Project/C/"><span class="level-start"><span class="level-item">C++</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/System-Design/"><span class="level-start"><span class="level-item">System-Design</span></span><span class="level-end"><span class="level-item tag">11</span></span></a><ul><li><a class="level is-mobile" href="/categories/System-Design/ML/"><span class="level-start"><span class="level-item">ML</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Tech/"><span class="level-start"><span class="level-item">Tech</span></span><span class="level-end"><span class="level-item tag">22</span></span></a><ul><li><a class="level is-mobile" href="/categories/Tech/Intro/"><span class="level-start"><span class="level-item">Intro</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI-Agent/"><span class="tag">AI Agent</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C++</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Deep-Learning/"><span class="tag">Deep Learning</span><span class="tag">8</span></a></div><div class="control"><a class="tags has-addons" href="/tags/FFmpeg/"><span class="tag">FFmpeg</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Grokking-the-ML-system-designs/"><span class="tag">Grokking-the-ML-system-designs</span><span class="tag">8</span></a></div><div class="control"><a class="tags has-addons" href="/tags/LangChain/"><span class="tag">LangChain</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Machine-Learning/"><span class="tag">Machine Learning</span><span class="tag">11</span></a></div><div class="control"><a class="tags has-addons" href="/tags/OpenCV/"><span class="tag">OpenCV</span><span class="tag">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/OpenGL/"><span class="tag">OpenGL</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Paper/"><span class="tag">Paper</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tools/"><span class="tag">Tools</span><span class="tag">2</span></a></div></div></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/web_icons.jpg" alt="JieSun LOGBOOK" height="28"></a><p class="is-size-7"><span>&copy; 2025 Jie Sun</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mhchem.min.js" defer></script><script>window.addEventListener("load", function() {
+            document.querySelectorAll('[role="article"] > .content').forEach(function(element) {
+                renderMathInElement(element);
+            });
+        });</script><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
