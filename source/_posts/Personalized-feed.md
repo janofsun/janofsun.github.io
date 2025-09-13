@@ -123,7 +123,7 @@ Re-ranker
 <font color=#f6a69c>Loss function</font>
 - The overall loss is computed by combining task-specific losses
 - use a binary cross-entropy loss for each binary classification task
-- a regression loss such as MAE [11], MSE [12], or Huber loss [13] for the regression task (dwell-time prediction).
+- a regression loss such as MAE, MSE, or Huber loss for the regression task (dwell-time prediction).
 
 Improving the DNN architecture for passive users (dwell-time and skip), since the current multi-task DNN model will predict very low probabilities for all reactions, since they rarely react to posts.
 
